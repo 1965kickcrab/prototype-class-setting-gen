@@ -1,0 +1,57 @@
+.report-detail__meta {
+  padding: 24px;
+  background: #fafafa;
+}
+
+.report-detail__date {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.report-detail__meta-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.report-detail__class-badge {
+  padding: 4px 8px;
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.report-detail__recipient {
+  margin: 8px 0 0;
+  color: var(--color-text);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.report-detail__body {
+  padding: 24px;
+}
+
+.report-detail__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 0.78;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.report-detail__paragraph {
+  margin: 24px 0 0;
+  color: var(--color-text);
+  font-size: 19px;
+  line-height: 1.55;
+  white-space: pre-line;
+}
+
+.report-detail__empty {
+  margin: 36vh 0 0;
+}

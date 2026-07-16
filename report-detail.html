@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>알림장 내용</title>
+    <link rel="stylesheet" href="src/styles/app.css" />
+  </head>
+  <body>
+    <main class="report-detail app-screen" aria-labelledby="report-detail-title">
+      <header class="report-detail__header app-header">
+        <button class="report-detail__back app-header__button" type="button" data-action="go-back" aria-label="알림장 목록으로 돌아가기">‹</button>
+        <h1 class="report-detail__title app-header__title" id="report-detail-title">알림장 내용</h1>
+        <span aria-hidden="true"></span>
+      </header>
+      <section class="report-detail__meta">
+        <div class="report-detail__meta-heading">
+          <p class="report-detail__date" data-field="report-date"></p>
+          <span class="report-detail__class-badge" data-field="report-class"></span>
+        </div>
+        <h2 class="report-detail__recipient" data-field="report-recipient"></h2>
+      </section>
+      <article class="report-detail__body" data-field="report-body"></article>
+      <p class="report-detail__empty empty-state" data-field="empty-message" hidden>알림장을 찾을 수 없습니다.</p>
+    </main>
+    <script type="module" src="src/report-detail-main.js"></script>
+  </body>
+</html>

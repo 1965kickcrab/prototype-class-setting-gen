@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>알림장</title>
+    <link rel="stylesheet" href="src/styles/app.css" />
+  </head>
+  <body>
+    <main class="report-list app-screen" aria-labelledby="report-list-title">
+      <header class="report-list__header">
+        <h1 class="report-list__title" id="report-list-title">알림장</h1>
+      </header>
+      <p class="report-list__empty empty-state" data-field="empty-message" hidden>작성된 알림장이 없습니다.</p>
+      <div class="report-list__content" data-field="report-list"></div>
+    </main>
+
+    <div data-component="bottom-navigation"></div>
+    <script type="module" src="src/report-main.js"></script>
+  </body>
+</html>
