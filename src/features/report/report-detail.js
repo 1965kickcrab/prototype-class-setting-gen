@@ -1,5 +1,4 @@
 import { getReportList, markReportAsRead } from '../../storage/report-storage.js';
-import { getSchoolReservationData } from '../../storage/school-reservation-storage.js';
 
 const WEEKDAY_LABELS = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -13,7 +12,6 @@ function formatDate(dateKey) {
 export function createReportDetail(root) {
   const reportId = new URLSearchParams(window.location.search).get('id');
   const report = getReportList().find((item) => item.id === reportId);
-  const { schoolClassList } = getSchoolReservationData();
   const dateField = root.querySelector('[data-field="report-date"]');
   const classField = root.querySelector('[data-field="report-class"]');
   const recipientField = root.querySelector('[data-field="report-recipient"]');
@@ -27,7 +25,7 @@ export function createReportDetail(root) {
 
   markReportAsRead(report.id);
   dateField.textContent = formatDate(report.date);
-  classField.textContent = schoolClassList.find((schoolClass) => schoolClass.id === report.classId)?.name ?? '배정 클래스 없음';
+  classField.textContent = report.className ?? report.classSnapshot?.name ?? '배정 클래스 없음';
   recipientField.textContent = `${report.recipientPetName} (다이얼독 유치원)`;
   body.innerHTML = `
     ${report.imagePath ? `<img class="report-detail__image" src="${report.imagePath}" alt="${report.recipientPetName} 알림장 사진" />` : ''}
