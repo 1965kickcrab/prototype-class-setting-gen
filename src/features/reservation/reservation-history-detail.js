@@ -51,6 +51,7 @@ export function createReservationHistoryDetail(root) {
   const guardianName = root.querySelector('[data-field="guardian-name"]');
   const reservationCount = root.querySelector('[data-field="reservation-count"]');
   const petGroupsContainer = root.querySelector('[data-field="pet-groups"]');
+  const completionToast = root.querySelector('[data-field="reservation-completion-toast"]');
   const cancelDialog = document.querySelector('[data-field="cancel-dialog"]');
   const expandedPetIds = new Set();
 
@@ -119,6 +120,21 @@ export function createReservationHistoryDetail(root) {
     }).join('');
   }
 
+  function showCompletionToast() {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    if (searchParams.get('reservationCompleted') !== 'true') return;
+
+    completionToast.hidden = false;
+    window.setTimeout(() => {
+      completionToast.hidden = true;
+    }, 3000);
+
+    searchParams.delete('reservationCompleted');
+    const query = searchParams.toString();
+    window.history.replaceState(null, '', `${window.location.pathname}${query ? `?${query}` : ''}`);
+  }
+
   root.addEventListener('click', (event) => {
     const actionTarget = event.target.closest('[data-action]');
 
@@ -165,4 +181,5 @@ export function createReservationHistoryDetail(root) {
   });
 
   render();
+  showCompletionToast();
 }

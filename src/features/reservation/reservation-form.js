@@ -236,8 +236,9 @@ export function createReservationForm(root, { onClose } = {}) {
         return;
       }
 
-      window.alert(`${result.reservations.length}건의 예약이 완료되었습니다.`);
-      onClose?.();
+      const reservationId = result.reservations[0]?.reservationId;
+
+      window.location.assign(`./reservation-history-detail.html?reservationId=${encodeURIComponent(reservationId)}&reservationCompleted=true`);
     }
   });
 

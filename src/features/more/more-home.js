@@ -19,8 +19,5 @@ export function createMoreHome(container) {
       window.location.assign('./my-tickets.html');
     }
 
-    if (actionTarget.dataset.action === 'open-pets') {
-      window.location.assign('./pets.html');
-    }
   });
 }

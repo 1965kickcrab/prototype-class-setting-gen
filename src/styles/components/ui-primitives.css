@@ -96,6 +96,30 @@
   text-align: center;
 }
 
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: 387px;
+  max-width: 90%;
+  margin: 0;
+  padding: 16px 20px;
+  color: var(--color-action-text);
+  background: var(--color-text);
+  border-radius: var(--radius-3);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.toast[hidden] {
+  display: none;
+}
+
 .surface-card {
   box-sizing: border-box;
   background: var(--color-surface);

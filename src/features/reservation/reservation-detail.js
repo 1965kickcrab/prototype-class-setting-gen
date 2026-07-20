@@ -111,7 +111,7 @@ export function createReservationDetail(root) {
       const result = cancelSchoolReservations([...state.selectedReservationIds]);
 
       if (!result.ok) window.alert(result.message);
-      else state.selectedReservationIds = new Set();
+      else window.location.assign('./index.html?reservationCancelled=true');
 
       render();
     }

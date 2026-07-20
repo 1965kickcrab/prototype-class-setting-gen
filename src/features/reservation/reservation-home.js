@@ -30,6 +30,22 @@ export function createReservationHome(root) {
   const selectedDateLabel = root.querySelector('[data-field="selected-date"]');
   const emptyMessage = root.querySelector('[data-field="empty-message"]');
   const reservationList = root.querySelector('[data-field="reservation-list"]');
+  const cancellationToast = root.querySelector('[data-field="reservation-cancellation-toast"]');
+
+  function showCancellationToast() {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    if (searchParams.get('reservationCancelled') !== 'true') return;
+
+    cancellationToast.hidden = false;
+    window.setTimeout(() => {
+      cancellationToast.hidden = true;
+    }, 3000);
+
+    searchParams.delete('reservationCancelled');
+    const query = searchParams.toString();
+    window.history.replaceState(null, '', `${window.location.pathname}${query ? `?${query}` : ''}`);
+  }
 
   function renderReservationSummary() {
     const selectedDateKey = toDateKey(state.selectedDate);
@@ -135,4 +151,5 @@ export function createReservationHome(root) {
   });
 
   renderCalendar();
+  showCancellationToast();
 }
