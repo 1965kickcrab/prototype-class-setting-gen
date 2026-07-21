@@ -2,6 +2,7 @@ import { getStoredMembers } from '../../storage/member-storage.js';
 import { getSchoolReservationData } from '../../storage/school-reservation-storage.js';
 import {
   canSelectPet,
+  getPetClassIds,
   getPetRemainingCount,
   getSelectedPetAvailability,
   getSharedClassIds,
@@ -66,14 +67,16 @@ export function createReservationForm(root, { onClose } = {}) {
   function renderPets() {
     petList.innerHTML = pets.map((pet) => {
       const remaining = getPetRemainingCount(pet);
+      const hasAssignedClass = getPetClassIds(pet).length > 0;
       const isSelected = state.selectedPetIds.has(pet.id);
       const disabled = !canSelectPet(pets, state.selectedPetIds, pet);
+      const availabilityLabel = hasAssignedClass ? `${remaining}회 예약 가능` : '소속 클래스 없음';
 
       return `
         <button class="pet-selector__item surface-card${isSelected ? ' surface-card--selected pet-selector__item--selected' : ''}" type="button" data-action="toggle-pet" data-pet-id="${pet.id}" ${disabled ? 'disabled' : ''} aria-pressed="${isSelected}">
           <span class="pet-selector__check" aria-hidden="true">${isSelected ? '✓' : ''}</span>
           <span class="pet-selector__name">${pet.petName}</span>
-          <span class="pet-selector__count">${remaining}회 예약 가능</span>
+          <span class="pet-selector__count">${availabilityLabel}</span>
         </button>
       `;
     }).join('');

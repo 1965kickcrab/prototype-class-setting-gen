@@ -43,7 +43,7 @@ export function createTicketHistory(root) {
 
     const remaining = getReservationCount(pet);
     const ticketState = remaining > 0 ? '이용 중' : '횟수 소진';
-    const { schoolClassList, schoolReservationList } = getSchoolReservationData();
+    const { schoolReservationList } = getSchoolReservationData();
     const usageHistory = schoolReservationList
       .filter((reservation) => reservation.memberId === guardian.id && reservation.petId === pet.id)
       .sort((left, right) => right.date.localeCompare(left.date));
@@ -80,7 +80,7 @@ export function createTicketHistory(root) {
           ${usageHistory.length ? usageHistory.map((reservation) => `
             <article class="ticket-usage-item surface-card" data-state="${reservation.status === '취소' ? 'cancelled' : 'confirmed'}">
               <strong class="ticket-usage-item__business">${reservation.businessName ?? '다이얼독 유치원'}</strong>
-              <span class="ticket-usage-item__class">${reservation.className ?? reservation.classSnapshot?.name ?? schoolClassList.find((schoolClass) => schoolClass.id === reservation.classId)?.name ?? '클래스 정보 없음'}</span>
+              <span class="ticket-usage-item__class">${reservation.className ?? '클래스 정보 없음'}</span>
               <span class="ticket-usage-item__date">${formatDate(reservation.date)}</span>
               ${reservation.status === '취소' ? '<span class="ticket-usage-item__state">취소</span>' : ''}
             </article>
