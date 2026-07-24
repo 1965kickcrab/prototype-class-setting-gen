@@ -4,8 +4,10 @@ import {
   canSelectPet,
   getPetClassIds,
   getPetRemainingCount,
+  getReservationClass,
   getSelectedPetAvailability,
   getSharedClassIds,
+  UNASSIGNED_CLASS_ID,
 } from '../../services/reservation-availability.js';
 import {
   applyPastSchoolReservationAttendance,
@@ -85,7 +87,9 @@ export function createReservationForm(root, { onClose } = {}) {
   function getAvailableClasses() {
     const sharedClassIds = getSharedClassIds(pets, state.selectedPetIds);
 
-    return schoolClassList.filter((schoolClass) => sharedClassIds.includes(schoolClass.id));
+    return sharedClassIds
+      .map((classId) => getReservationClass(schoolClassList, classId))
+      .filter(Boolean);
   }
 
   function renderClassSelection() {
@@ -180,8 +184,12 @@ export function createReservationForm(root, { onClose } = {}) {
       if (state.selectedPetIds.has(petId)) state.selectedPetIds.delete(petId);
       else state.selectedPetIds.add(petId);
 
-      if (!getSharedClassIds(pets, state.selectedPetIds).includes(state.selectedClassId)) {
-        state.selectedClassId = null;
+      const sharedClassIds = getSharedClassIds(pets, state.selectedPetIds);
+
+      if (!sharedClassIds.includes(state.selectedClassId)) {
+        state.selectedClassId = sharedClassIds.length === 1 && sharedClassIds[0] === UNASSIGNED_CLASS_ID
+          ? UNASSIGNED_CLASS_ID
+          : null;
       }
 
       state.selectedDates.clear();
@@ -239,9 +247,9 @@ export function createReservationForm(root, { onClose } = {}) {
         return;
       }
 
-      const reservationId = result.reservations[0]?.reservationId;
+      const reservationCreatedAt = result.reservations[0]?.createdAt;
 
-      window.location.assign(`./reservation-history-detail.html?reservationId=${encodeURIComponent(reservationId)}&reservationCompleted=true`);
+      window.location.assign(`./reservation-history-detail.html?createdAt=${encodeURIComponent(reservationCreatedAt)}&reservationCompleted=true`);
     }
   });
 

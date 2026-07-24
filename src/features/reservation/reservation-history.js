@@ -10,6 +10,12 @@ function formatReservationDate(dateKey) {
   return `${String(year).slice(2)}. ${month}. ${day}(${WEEKDAY_LABELS[date.getDay()]}) 예약`;
 }
 
+function formatPetReservationDates(reservations) {
+  const dates = [...new Set(reservations.map((reservation) => reservation.date))].sort();
+
+  return formatReservationDate(dates[0]);
+}
+
 function getStatusInfo(status) {
   return status === '취소'
     ? { label: '예약 취소', state: 'cancelled' }
@@ -31,11 +37,11 @@ export function createReservationHistory(root) {
     const { schoolReservationList } = getSchoolReservationData();
     const reservations = schoolReservationList
       .filter((reservation) => reservation.memberId === guardian?.id)
-      .sort((left, right) => right.date.localeCompare(left.date));
+      .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
     const groups = new Map();
 
     reservations.forEach((reservation) => {
-      const reservationGroupId = reservation.reservationId ?? reservation.id;
+      const reservationGroupId = reservation.createdAt;
       const group = groups.get(reservationGroupId) ?? {
         id: reservationGroupId,
         reservations: [],
@@ -60,7 +66,7 @@ export function createReservationHistory(root) {
     const reservationGroup = event.target.closest('[data-action="open-reservation-detail"]');
 
     if (reservationGroup) {
-      window.location.assign(`./reservation-history-detail.html?reservationId=${encodeURIComponent(reservationGroup.dataset.entityId)}`);
+      window.location.assign(`./reservation-history-detail.html?createdAt=${encodeURIComponent(reservationGroup.dataset.entityId)}`);
     }
   });
 
@@ -89,21 +95,20 @@ function createPetGroups(reservations) {
 
   return [...petGroups.values()].map((petGroup) => {
     const { label, state } = getPetGroupStatusInfo(petGroup.reservations);
+    const pet = petGroup.reservations[0];
 
     return `
       <section class="reservation-pet-group reservation-pet-group--${state}" data-entity-id="${petGroup.id}" aria-label="${label}">
         <h2 class="reservation-pet-group__title">${label}</h2>
         <div class="reservation-pet-group__list">
-          ${petGroup.reservations.map((reservation) => `
-            <article class="reservation-summary-item" data-entity-id="${reservation.id}">
-              <img class="reservation-summary-item__avatar" src="assets/images/defaultProfile_dog.svg" alt="" />
-              <div class="reservation-summary-item__content">
-                <p class="reservation-summary-item__date">${formatReservationDate(reservation.date)}</p>
-                <p class="reservation-summary-item__type">다이얼독 유치원</p>
-                <strong class="reservation-summary-item__pet-name">${reservation.petName}</strong>
-              </div>
-            </article>
-          `).join('')}
+          <article class="reservation-summary-item" data-entity-id="${petGroup.id}">
+            <img class="reservation-summary-item__avatar" src="assets/images/defaultProfile_dog.svg" alt="" />
+            <div class="reservation-summary-item__content">
+              <p class="reservation-summary-item__date">${formatPetReservationDates(petGroup.reservations)}</p>
+              <p class="reservation-summary-item__type">다이얼독 유치원</p>
+              <strong class="reservation-summary-item__pet-name">${pet.petName}</strong>
+            </div>
+          </article>
         </div>
       </section>
     `;

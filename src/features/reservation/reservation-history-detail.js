@@ -40,6 +40,7 @@ function getPetGroups(reservations) {
 }
 
 export function createReservationHistoryDetail(root) {
+  const reservationCreatedAt = new URLSearchParams(window.location.search).get('createdAt');
   const reservationId = new URLSearchParams(window.location.search).get('reservationId');
   const cancelAllButton = root.querySelector('[data-field="cancel-all"]');
   const cancellationNotice = root.querySelector('[data-field="cancellation-notice"]');
@@ -58,7 +59,11 @@ export function createReservationHistoryDetail(root) {
   function getReservations() {
     const { schoolReservationList } = getSchoolReservationData();
 
-    return schoolReservationList.filter((reservation) => (reservation.reservationId ?? reservation.id) === reservationId);
+    return schoolReservationList.filter((reservation) => (
+      reservationCreatedAt
+        ? reservation.createdAt === reservationCreatedAt
+        : (reservation.reservationId ?? reservation.id) === reservationId
+    ));
   }
 
   function render() {

@@ -4,7 +4,10 @@ import {
   updateSchoolTicketCounts,
 } from '../storage/member-storage.js';
 import { getSchoolReservationData, saveSchoolReservationList } from '../storage/school-reservation-storage.js';
-import { getSelectedPetAvailability } from './reservation-availability.js';
+import {
+  getReservationClass,
+  getSelectedPetAvailability,
+} from './reservation-availability.js';
 
 function createReservationId() {
   if (window.crypto?.randomUUID) return `school-reservation-${window.crypto.randomUUID()}`;
@@ -67,7 +70,7 @@ export function createSchoolReservations({ memberId, petIds, classId, dateKeys }
   const guardian = getStoredMembers().find((member) => member.id === memberId);
   const selectedPets = guardian?.pets.filter((pet) => petIds.includes(pet.id)) ?? [];
   const selectedPetIds = new Set(selectedPets.map((pet) => pet.id));
-  const schoolClass = schoolClassList.find((item) => item.id === classId);
+  const schoolClass = getReservationClass(schoolClassList, classId);
   const uniqueDateKeys = [...new Set(dateKeys)].sort();
   const todayKey = getTodayKey();
 

@@ -1,11 +1,30 @@
 const DAY_KEY_BY_INDEX = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+const SCHOOL_BUSINESS_DAYS = ['mon', 'tue', 'wed', 'thu', 'fri'];
+
+export const UNASSIGNED_CLASS_ID = 'unassigned';
+export const UNASSIGNED_CLASS = {
+  id: UNASSIGNED_CLASS_ID,
+  name: '소속 클래스 없음',
+  capacity: null,
+  businessDays: SCHOOL_BUSINESS_DAYS,
+};
 
 export function getPetRemainingCount(pet) {
   return Number(pet.totalReservableCountByType?.school ?? 0);
 }
 
 export function getPetClassIds(pet) {
-  return pet.schoolClassIds ?? [];
+  const classIds = Array.isArray(pet.schoolClassIds)
+    ? pet.schoolClassIds.filter(Boolean)
+    : [];
+
+  return classIds.length > 0 ? classIds : [UNASSIGNED_CLASS_ID];
+}
+
+export function getReservationClass(schoolClassList, classId) {
+  if (classId === UNASSIGNED_CLASS_ID) return UNASSIGNED_CLASS;
+
+  return schoolClassList.find((schoolClass) => schoolClass.id === classId);
 }
 
 export function getSharedClassIds(pets, selectedPetIds) {
@@ -27,7 +46,7 @@ export function canSelectPet(pets, selectedPetIds, pet) {
 
 export function getSelectedPetAvailability(pets, schoolClassList, schoolReservationList, selectedPetIds, selectedClassId, dateKey) {
   const selectedPets = pets.filter((pet) => selectedPetIds.has(pet.id));
-  const selectedClass = schoolClassList.find((schoolClass) => schoolClass.id === selectedClassId);
+  const selectedClass = getReservationClass(schoolClassList, selectedClassId);
   const sharedClassIds = getSharedClassIds(pets, selectedPetIds);
 
   if (selectedPets.length === 0 || !selectedClass || !sharedClassIds.includes(selectedClassId)) {
